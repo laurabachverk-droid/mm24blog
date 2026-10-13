@@ -11,12 +11,12 @@ Install these tools before starting:
 - **Git** — to clone the repository.
 - **PHP 8.3 or newer** — this project requires `^8.3` (see `composer.json`).
 - **Composer** — PHP dependency manager.
-- **Bun** — JavaScript package manager used by this repository's `bun.lock`. Node.js and npm can also be used instead, but use one package manager consistently.
+- **Node.js and npm** — used by the project's built-in Composer setup script to install and build frontend assets.
 - **PHP extensions** required by Laravel, including PDO/SQLite, OpenSSL, Mbstring, cURL, Fileinfo, XML, Ctype, and Tokenizer.
 
 Useful official installation pages:
 - PHP and Composer: https://laravel.com/docs/13.x/installation
-- Bun: https://bun.sh/docs/installation
+- Node.js: https://nodejs.org/en/download
 - Composer: https://getcomposer.org/download/
 
 To check that the tools are available, open a new PowerShell terminal and run:
@@ -25,7 +25,7 @@ To check that the tools are available, open a new PowerShell terminal and run:
 git --version
 php -v
 composer --version
-bun --version
+npm --version
 ```
 
 If a command is not recognized, install that tool or correct its PATH setting, then reopen the terminal.
@@ -59,23 +59,21 @@ php -m
 
 ## 3. Install frontend dependencies
 
-This repository includes `bun.lock`, so the recommended option is Bun:
-
-```powershell
-bun install
-bun run build
-```
-
-This installs the JavaScript packages and builds the frontend assets.
-
-If you use Node.js and npm instead of Bun, use these commands rather than the Bun commands:
+The project's `composer.json` setup script uses npm, so npm is the default documented workflow:
 
 ```powershell
 npm install
 npm run build
 ```
 
-Do not mix package managers for the same installation unless you know why you need to do so.
+This installs the JavaScript packages and builds the frontend assets. The repository also contains `bun.lock`, so Bun is an alternative if you prefer it:
+
+```powershell
+bun install
+bun run build
+```
+
+Choose one package manager for your local install and do not mix npm and Bun lockfiles unnecessarily.
 
 ## 4. Create the environment file
 
