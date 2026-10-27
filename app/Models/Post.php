@@ -11,6 +11,8 @@ class Post extends Model
     /** @use HasFactory<\Database\Factories\PostFactory> */
     use HasFactory;
 
+    protected $fillable = ['title', 'body'];
+
     public function snippet(): Attribute {
         return Attribute::get(function () {
             return explode("\n\n", $this->body)[0];
@@ -21,5 +23,21 @@ class Post extends Model
         return Attribute::get(function () {
             return nl2br(htmlspecialchars($this->body));
         });
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
+    public function images() {
+        return $this->hasMany(Image::class);
+    }
+
+    public function comments() {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function tags() {
+        return $this->belongsToMany(Tag::class);
     }
 }
