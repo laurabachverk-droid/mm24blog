@@ -1,22 +1,30 @@
 @extends('partials.layout')
 @section('content')
-    <button class="border-2 text-white bg-blue-400">Hello</button>
-    <div class="inline-flex mt-6">
-        <button
-            class="rounded-s-sm border border-gray-200 px-3 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900 focus:z-10 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white focus:outline-none disabled:pointer-events-auto disabled:opacity-50">
-            View
-        </button>
+    <section class="mx-auto max-w-3xl space-y-8 px-4 py-8">
+        <div>
+            <h1 class="mb-2 text-2xl font-bold text-gray-900">Bootstrap primary button with Tailwind</h1>
+            <p class="text-gray-600">These buttons use Tailwind utility classes only — no Bootstrap CSS and no custom CSS.</p>
+        </div>
 
-        <button
-            class="-ms-px border border-gray-200 px-3 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900 focus:z-10 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white focus:outline-none disabled:pointer-events-auto disabled:opacity-50">
-            Edit
-        </button>
+        <div class="space-y-3">
+            <h2 class="text-lg font-semibold text-gray-900">Tailwind version</h2>
+            <div class="flex flex-wrap items-center gap-4">
+                <button type="button"
+                    class="inline-block rounded-md border border-transparent bg-[#0d6efd] px-3 py-1.5 text-base font-normal leading-6 text-white transition-colors hover:bg-[#0b5ed7] active:bg-[#0a58ca] active:translate-y-px focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#0d6efd]/50 disabled:pointer-events-none disabled:opacity-[0.65]">
+                    Primary button
+                </button>
 
-        <button
-            class="-ms-px rounded-e-sm border border-gray-200 px-3 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900 focus:z-10 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white focus:outline-none disabled:pointer-events-auto disabled:opacity-50">
-            Delete
-        </button>
-    </div>
+                <button type="button" disabled
+                    class="inline-block rounded-md border border-transparent bg-[#0d6efd] px-3 py-1.5 text-base font-normal leading-6 text-white transition-colors hover:bg-[#0b5ed7] active:bg-[#0a58ca] active:translate-y-px focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#0d6efd]/50 disabled:pointer-events-none disabled:opacity-[0.65]">
+                    Disabled button
+                </button>
+            </div>
+            <p class="text-sm text-gray-600">Try hovering, clicking, and using Tab to move keyboard focus to the enabled button. The disabled button cannot be focused or clicked.</p>
+        </div>
 
-    <button class="btn btn-primary">Click me!</button>
+        <div class="space-y-3">
+            <h2 class="text-lg font-semibold text-gray-900">Tailwind classes used</h2>
+            <code class="block whitespace-normal break-words rounded-md bg-gray-100 p-4 text-sm leading-6 text-gray-800">inline-block rounded-md border border-transparent bg-[#0d6efd] px-3 py-1.5 text-base font-normal leading-6 text-white transition-colors hover:bg-[#0b5ed7] active:bg-[#0a58ca] active:translate-y-px focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#0d6efd]/50 disabled:pointer-events-none disabled:opacity-[0.65]</code>
+        </div>
+    </section>
 @endsection
