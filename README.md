@@ -1,91 +1,125 @@
 # mm24blog
 
-A Laravel 13 blog project using PHP, SQLite, Blade views, and Vite with Tailwind CSS.
+A Laravel 13 blog application built with PHP, SQLite, Blade, Vite, and Tailwind CSS.
 
-This guide explains how to install the project on Windows, from cloning the repository to running it locally.
+This guide explains how to install and run the project on Windows from a clean computer. Run the commands in PowerShell unless stated otherwise.
 
-## Requirements
+## 1. Install the required programs
 
-Install these tools before starting:
+Install the following tools:
 
-- **Git** — to clone the repository.
-- **PHP 8.3 or newer** — this project requires `^8.3` (see `composer.json`).
-- **Composer** — PHP dependency manager.
-- **Node.js and npm** — used by the project's built-in Composer setup script to install and build frontend assets.
-- **PHP extensions** required by Laravel, including PDO/SQLite, OpenSSL, Mbstring, cURL, Fileinfo, XML, Ctype, and Tokenizer.
+- **Visual Studio Code:** https://code.visualstudio.com/Download
+- **Git for Windows:** https://git-scm.com/download/win
+- **PHP 8.3 or newer:** https://windows.php.net/download/ (or follow Laravel's Windows setup guide: https://laravel.com/docs/13.x/installation)
+- **Composer:** https://getcomposer.org/download/
+- **Bun:** https://bun.sh/docs/installation
+- **Node.js and npm (recommended as a fallback):** https://nodejs.org/en/download
 
-Useful official installation pages:
-- PHP and Composer: https://laravel.com/docs/13.x/installation
-- Node.js: https://nodejs.org/en/download
-- Composer: https://getcomposer.org/download/
-
-To check that the tools are available, open a new PowerShell terminal and run:
+After installing, close and reopen PowerShell. Check that the commands are available:
 
 ```powershell
 git --version
 php -v
 composer --version
+bun --version
+node --version
 npm --version
 ```
 
-If a command is not recognized, install that tool or correct its PATH setting, then reopen the terminal.
+If a command is not recognized, check that the program is installed and added to your Windows PATH, then open a new terminal.
 
-## 1. Clone the repository
+## 2. Enable the required PHP extensions
 
-Choose a location for your projects, open PowerShell there, and run:
+Laravel needs PHP extensions for encryption, database access, file handling, and XML processing. This project uses SQLite. Make sure these extensions are enabled:
+
+- `ctype`
+- `curl`
+- `dom`
+- `fileinfo`
+- `filter`
+- `hash`
+- `mbstring`
+- `openssl`
+- `pdo`
+- `pdo_sqlite`
+- `session`
+- `tokenizer`
+- `xml`
+- `sqlite3`
+
+Find the active PHP configuration file:
+
+```powershell
+php --ini
+```
+
+Open the listed **Loaded Configuration File** (the `php.ini`) in VS Code or Notepad. In Windows PHP installations, extension lines may start with a semicolon. Remove the leading semicolon from the relevant lines, for example:
+
+```ini
+extension=curl
+extension=fileinfo
+extension=mbstring
+extension=openssl
+extension=pdo_sqlite
+extension=sqlite3
+```
+
+Do not add duplicate entries if an extension is already enabled. Save `php.ini`, reopen PowerShell, and check the loaded modules:
+
+```powershell
+php -m
+```
+
+If an extension is missing from the list, check that the extension DLL exists in the PHP `ext` folder and that the `extension_dir` setting points to that folder. The exact PHP setup may differ depending on how PHP was installed.
+
+## 3. Clone the repository
+
+Open PowerShell in the folder where you keep your projects, then run:
 
 ```powershell
 git clone https://github.com/laurabachverk-droid/mm24blog.git
 cd mm24blog
 ```
 
-All following commands should be run from the project root, the directory containing `composer.json` and `package.json`.
+Run the remaining commands from the `mm24blog` project root, where `composer.json` and `package.json` are located.
 
-## 2. Install PHP dependencies
+## 4. Install PHP dependencies
 
-Run:
+Install the packages listed in `composer.json` and `composer.lock`:
 
 ```powershell
 composer install
 ```
 
-Composer reads `composer.json` and `composer.lock` and installs the PHP packages into `vendor/`.
+If Composer reports a missing PHP extension, return to step 2, enable it in the active `php.ini`, and rerun `composer install`.
 
-If Composer reports a missing PHP extension, run `php --ini` to see which `php.ini` file is loaded. Enable the required extension in that file, save it, open a new terminal, and check the modules with:
+## 5. Install frontend dependencies with Bun
 
-```powershell
-php -m
-```
-
-## 3. Install frontend dependencies
-
-The project's `composer.json` setup script uses npm, so npm is the default documented workflow:
-
-```powershell
-npm install
-npm run build
-```
-
-This installs the JavaScript packages and builds the frontend assets. The repository also contains `bun.lock`, so Bun is an alternative if you prefer it:
+Install Bun packages and build the frontend assets:
 
 ```powershell
 bun install
 bun run build
 ```
 
-Choose one package manager for your local install and do not mix npm and Bun lockfiles unnecessarily.
+The project also supports npm. If you choose npm instead of Bun, use the following commands rather than mixing package managers:
 
-## 4. Create the environment file
+```powershell
+npm install
+npm run build
+```
 
-Create your local `.env` file from the provided example:
+## 6. Create the environment file
+
+Copy the example environment configuration to your local `.env` file:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-If PowerShell says that `.env` already exists, keep your existing local configuration rather than overwriting it.
+If `.env` already exists, do not overwrite your local configuration. The example file configures the project to use SQLite and sets the local application URL to `http://localhost:8000`.
 
-## 5. Generate the application key
+## 7. Generate the application key
 
 Run:
 
@@ -93,11 +127,11 @@ Run:
 php artisan key:generate
 ```
 
-Laravel writes the application encryption key into `.env`. Do not commit your real `.env` file or share its contents publicly.
+This generates the encryption key and saves it to `.env`. Do not commit or share your real `.env` file.
 
-## 6. Create the SQLite database and run migrations
+## 8. Create the SQLite database and run migrations
 
-The example environment is configured for SQLite. First, create the database file if it does not exist:
+Create the SQLite database file if it does not exist:
 
 ```powershell
 if (-not (Test-Path "database/database.sqlite")) {
@@ -105,50 +139,49 @@ if (-not (Test-Path "database/database.sqlite")) {
 }
 ```
 
-Then run the migrations:
+Create the database tables:
 
 ```powershell
 php artisan migrate
 ```
 
-If Laravel reports that the database file cannot be opened, confirm that `database/database.sqlite` exists and that PHP has the SQLite/PDO SQLite extensions enabled.
+If Laravel cannot open the database, confirm that `database/database.sqlite` exists and that `pdo_sqlite` and `sqlite3` are enabled in PHP.
 
-## 7. Start the project
+## 9. Start the application
 
-Run the development command from the project root:
+Start the Laravel development processes:
 
 ```powershell
 composer run dev
 ```
 
-Leave this terminal open while working. The Laravel development command starts the local development processes configured by the project. Stop them with `Ctrl+C`.
+Keep this terminal open while using the site. Open this address in your browser:
 
-Open the local URL shown by the terminal; the usual Laravel development address is:
+**http://localhost:8000**
 
-http://localhost:8000
+If the terminal prints a different local address, use the address shown there. Press `Ctrl+C` in the terminal to stop the development processes.
 
-## 8. Stop and restart the project
+## 10. Run the project again later
 
-To stop the development processes, press `Ctrl+C` in the terminal where `composer run dev` is running.
-
-To start again later, open PowerShell, change to the project folder, and run:
+After the first installation, you do not need to clone the repository or reinstall dependencies each time. Open PowerShell and navigate to your project folder, replacing the example path with your actual folder location:
 
 ```powershell
-cd path\to\mm24blog
+cd C:\path\to\mm24blog
 composer run dev
 ```
 
-Replace `path\to\mm24blog` with the actual location of your project folder.
+Then visit http://localhost:8000.
 
 ## Troubleshooting
 
-- **`php`, `composer`, `bun`, or `git` is not recognized:** install the missing tool, check PATH, and reopen PowerShell.
-- **Composer reports a PHP version or extension error:** make sure the active PHP version is 8.3 or newer and enable the required extension in the loaded `php.ini`.
-- **The database file does not exist:** repeat the database-file creation command in step 6, then run `php artisan migrate` again.
-- **Frontend assets are missing:** from the project root, run `bun install` and `bun run build` (or the equivalent npm commands if using npm).
-- **The local address does not load:** check the terminal for an error and make sure the development processes are still running.
+- **`php`, `composer`, `bun`, or `git` is not recognized:** install the missing program, check PATH, and restart PowerShell.
+- **Composer reports an unsupported PHP version:** install PHP 8.3 or newer and ensure that the correct PHP version is on PATH.
+- **Composer reports a missing extension:** enable it in the active `php.ini` as described in step 2.
+- **The database file cannot be opened:** repeat the SQLite file creation command in step 8 and check the SQLite PHP extensions.
+- **CSS or JavaScript assets are missing:** run `bun install` and `bun run build` from the project root.
+- **The page does not open:** make sure `composer run dev` is still running and use the local URL printed in the terminal.
 
-## Useful commands
+## Useful maintenance commands
 
 ```powershell
 php artisan route:list
@@ -156,4 +189,4 @@ php artisan migrate:status
 composer run test
 ```
 
-The first command lists registered routes, the second shows migration status, and the third runs the test suite configured by Composer.
+These commands list the registered routes, show migration status, and run the project's test suite.
